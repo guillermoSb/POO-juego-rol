@@ -26,14 +26,51 @@ public class Game {
         this.currentTurn = players.get(0);
     }
 
-    boolean getGameOver() {return this.gameOver;}
+    boolean getGameOver() {
+        return this.gameOver;
+    }
+
+    void changeToNextTurn() {
+        // * 1. Check if it is a player turn
+        int playerIndex = getPlayers().indexOf(getCurrentTurn());
+        if (playerIndex >= 0) {
+            // * 1.1 Get next index
+            if (getPlayers().size() <= playerIndex + 1) {
+                setCurrentTurn(getPlayers().get(playerIndex + 1));
+            } else {
+                // * 1.2 Set the first enemy index
+                setCurrentTurn(getEnemies().get(0));
+            }
+        } else {
+            // * 2. Check if it is an Enemy turn
+            int enemyIndex = getEnemies().indexOf(getCurrentTurn());
+            if (enemyIndex >= 0) {
+                // * 2.1 Get next index
+                if (getEnemies().size() <= enemyIndex + 1) {
+                    setCurrentTurn(getEnemies().get(playerIndex + 1));
+                } else {
+                    // * 2.2 Set the first enemy index
+                    setCurrentTurn(getPlayers().get(0));
+                }
+            }
+        }
+
+    };
 
     Character getCurrentTurn() {
         return this.currentTurn;
     }
-    
+
+    void setCurrentTurn(Character character) {
+        this.currentTurn = character;
+    }
+
     ArrayList<Character> getEnemies() {
         return this.enemies;
+    }
+
+    ArrayList<Player> getPlayers() {
+        return this.players;
     }
 
     @Override

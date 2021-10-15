@@ -28,6 +28,7 @@ public class Driver {
                 }
                 // * 2.3. Let the player decide what to do
                 System.out.flush();  // Clear the screen each time
+                game.changeToNextTurn(); // Change to the next turn
             } catch (Exception e) {
                 e.printStackTrace();
                 showError("Please choose a valid option.");
