@@ -9,6 +9,11 @@ public class RaidBoss extends Character {
         //TODO Auto-generated constructor stub
         this.companions = companions;
     }
+    RaidBoss(String name) {
+        super(100, 5, 0, name);
+        //TODO Auto-generated constructor stub
+        this.companions = new ArrayList<Character>();
+    }
 
     public void clone(Character character) {
         // TODO Implement Later
