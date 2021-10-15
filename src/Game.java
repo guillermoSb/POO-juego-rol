@@ -7,6 +7,7 @@ public class Game {
     private int level;
     private boolean gameOver = false;
     private Character currentTurn = null;
+    private String gameState = "";
 
     Game(ArrayList<Player> players, ArrayList<Character> enemies, int score, int level) {
         this.players = players;
@@ -23,7 +24,12 @@ public class Game {
         RaidBoss raidBoss = new RaidBoss("Super Bad Raid Boss");
         enemies.add(raidBoss);
         this.enemies = enemies; // Set the enemies array
+        this.players = players;
         this.currentTurn = players.get(0);
+    }
+
+    String getGameState() {
+        return this.gameState;
     }
 
     boolean getGameOver() {
@@ -35,7 +41,7 @@ public class Game {
         int playerIndex = getPlayers().indexOf(getCurrentTurn());
         if (playerIndex >= 0) {
             // * 1.1 Get next index
-            if (getPlayers().size() <= playerIndex + 1) {
+            if (getPlayers().size() < playerIndex + 1) {
                 setCurrentTurn(getPlayers().get(playerIndex + 1));
             } else {
                 // * 1.2 Set the first enemy index
@@ -46,15 +52,14 @@ public class Game {
             int enemyIndex = getEnemies().indexOf(getCurrentTurn());
             if (enemyIndex >= 0) {
                 // * 2.1 Get next index
-                if (getEnemies().size() <= enemyIndex + 1) {
-                    setCurrentTurn(getEnemies().get(playerIndex + 1));
+                if (getEnemies().size() < enemyIndex + 1) {
+                    setCurrentTurn(getEnemies().get(enemyIndex + 1));
                 } else {
                     // * 2.2 Set the first enemy index
                     setCurrentTurn(getPlayers().get(0));
                 }
             }
         }
-
     };
 
     Character getCurrentTurn() {

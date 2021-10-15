@@ -27,7 +27,9 @@ public class RaidBoss extends Character {
 
     @Override
     public void attack(Character character) {
-        // TODO Auto-generated method stub
+        int health = character.getHealth(); // Get the character health
+        health = health - (10 * damageMultiplier);
+        character.setHealth(Math.max(0, health));
     }
     
 }

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Defines a generic Character. It is any instance that interacts with the game.
@@ -49,6 +51,13 @@ public abstract class Character {
 
     String showMessage(String message) {
         return String.format("%s says: %s\n", name, message);
+    }
+
+    public Character attackRandomCharacter(ArrayList<Character> characters){
+        Random rand = new Random();
+        Character character = characters.get(rand.nextInt(characters.size()));  // Select a random player to attack
+        attack(character);
+        return character;
     }
 
 

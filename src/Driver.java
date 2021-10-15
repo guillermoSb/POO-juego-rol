@@ -9,8 +9,8 @@ public class Driver {
         while (game == null) {
             try {
                 // * 1. Ask for players info
-                ArrayList<Player> players = askForPlayerInfo(); 
-                game = new Game(players);   // Create the new game instance
+                ArrayList<Player> players = askForPlayerInfo();
+                game = new Game(players); // Create the new game instance
                 showInfo("A new game has been created.\nGood Luck!");
             } catch (Exception e) {
                 showError("Be sure to choose only valid options");
@@ -22,20 +22,23 @@ public class Driver {
             try {
                 // * 2.1. Show game state
                 System.out.println(game);
+                showInfo(String.format("Current turn is: %s", game.getCurrentTurn()));
                 // * 2.2. Check if it is the players turn
                 if (game.getCurrentTurn() instanceof Player) {
                     takeTurn(game);
+                } else if (game.getCurrentTurn() instanceof Enemy || game.getCurrentTurn() instanceof RaidBoss
+                        || game.getCurrentTurn() instanceof Boss) {
+                    takeEnemyTurn(game);
                 }
                 // * 2.3. Let the player decide what to do
-                System.out.flush();  // Clear the screen each time
-                game.changeToNextTurn(); // Change to the next turn
+                game.changeToNextTurn(); // Change to the next
             } catch (Exception e) {
                 e.printStackTrace();
                 showError("Please choose a valid option.");
             }
         }
         scan.close();
-       
+
     }
 
     public static void showMenu() {
@@ -46,7 +49,8 @@ public class Driver {
     }
 
     public static void showPlayerTypes() {
-        System.out.printf("1 - Warrior (More strength and health)\n2 - Explorer (More Item space)\n3 - Hunter (You can have a magic creature that will fight on your side)\n");
+        System.out.printf(
+                "1 - Warrior (More strength and health)\n2 - Explorer (More Item space)\n3 - Hunter (You can have a magic creature that will fight on your side)\n");
     }
 
     public static void showInfo(String message) {
@@ -83,7 +87,7 @@ public class Driver {
         } else if (playerType == 3) {
             player = new Hunter(playerName);
         }
-        players.add(player);    // Add the player to the ArrayList
+        players.add(player); // Add the player to the ArrayList
         return players; // Return the created players
     }
 
@@ -106,12 +110,32 @@ public class Driver {
             }
             // * 2.2 Attack the enemy
             game.getCurrentTurn().attack(game.getEnemies().get(selectedEnemy - 1));
-            showInfo(String.format("%s has attacked %s", game.getCurrentTurn().name, game.getEnemies().get(selectedEnemy - 1).getName()));
-            
+            showGameState(game.getCurrentTurn(), game.getEnemies().get(selectedEnemy - 1));
+
+        } else if (menuOption == 2) {
+            // * 2.3 If it is a hunter, throw the pet
+            if (game.getCurrentTurn() instanceof Hunter) {
+                Hunter hunter = (Hunter) game.getCurrentTurn();
+                Character characterAttacked = hunter.throwPet(game.getEnemies());
+                showGameState(hunter.getPet(), characterAttacked);
+            } else {
+                // * 2.4 Use an item
+            }
+
         }
     }
 
-    public static void showGameState(Game game) {
+    public static void takeEnemyTurn(Game game) {
+        ArrayList<Character> characters = new ArrayList<Character>(); // ? Is this the only way?
+        for (Player player : game.getPlayers()) {
+            characters.add(player);
+        }
+        Character characterAttacked = game.getCurrentTurn().attackRandomCharacter(characters); // Attack a random player
+        showGameState(game.getCurrentTurn(), characterAttacked);
+    }
+
+    public static void showGameState(Character attacker, Character attacked) {
+        showInfo(String.format("%s has attacked %s", attacker.getName(), attacked.getName()));
 
     }
 

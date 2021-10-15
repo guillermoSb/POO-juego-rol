@@ -18,11 +18,5 @@ public class Explorer extends Player{
         character.setHealth(Math.max(0, health));
         
     }
-
-    @Override
-    public String toString() {
-        // TODO Auto-generated method stub
-        return super.toString();
-    }
     
 }

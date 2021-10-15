@@ -12,8 +12,12 @@ public class Hunter extends Player {
         super(100, 2, 0, name, new ArrayList<Item>());
         this.pet = new Pet("Fido");
     }
-    public void throwPet(Character character) {
-        // TODO Implement later
+
+    public Pet getPet() {return pet;}
+
+    public Character throwPet(ArrayList<Character> characters) {
+        // * 1. The pet will decide which enemy to attack
+        return pet.attackRandomCharacter(characters);
     }
 
 
@@ -22,11 +26,5 @@ public class Hunter extends Player {
         int health = character.getHealth(); // Get the character health
         health = health - (10 * damageMultiplier);
         character.setHealth(Math.max(0, health));
-    }
-
-    @Override
-    public String toString() {
-        // TODO Auto-generated method stub
-        return super.toString();
     }
 }
