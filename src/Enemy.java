@@ -10,5 +10,10 @@ public class Enemy extends Character {
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s", this.getName());
+    }
     
 }

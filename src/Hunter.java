@@ -7,7 +7,11 @@ public class Hunter extends Player {
         super(health, hability, habilityCounter, name, items);
         this.pet = pet;
     }
-
+    
+    Hunter(String name) {
+        super(100, 2, 0, name, new ArrayList<Item>());
+        this.pet = new Pet("Fido");
+    }
     public void throwPet(Character character) {
         // TODO Implement later
     }
@@ -15,8 +19,9 @@ public class Hunter extends Player {
 
     @Override
     public void attack(Character character) {
-        // TODO Auto-generated method stub
-        
+        int health = character.getHealth(); // Get the character health
+        health = health - (10 * damageMultiplier);
+        character.setHealth(Math.max(0, health));
     }
 
     @Override

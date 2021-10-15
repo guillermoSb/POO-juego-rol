@@ -4,7 +4,7 @@
  */
 public abstract class Character {
     
-    int health, hability, habilityCounter;
+    int health, hability, habilityCounter, damageMultiplier;
     String name;
     
     Character(int health, int hability, int habilityCounter, String name) {
@@ -12,6 +12,7 @@ public abstract class Character {
         this.hability = hability;
         this.habilityCounter = habilityCounter;
         this.name = name;
+        this.damageMultiplier = 1;
     }
 
     int getHealth() {

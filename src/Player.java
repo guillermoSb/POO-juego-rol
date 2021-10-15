@@ -20,4 +20,11 @@ public abstract class Player extends Character {
     void useItem(int itemIndex, Character character) {
 
     }
+
+    @Override
+    public void attack(Character character) {
+        int health = character.getHealth(); // Get the character health
+        health = health - (10 * damageMultiplier);
+        character.setHealth(Math.max(0, health));
+    }
 }
