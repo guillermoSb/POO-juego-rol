@@ -7,7 +7,7 @@ import java.util.Random;
 public abstract class Character {
     
     protected int health, hability, habilityCounter, damageMultiplier;  // Basic characteer indicators
-    protected boolean usingHability = false;    // Indicates if the Character is using an hability    // TODO: Add to the UML
+    protected boolean usingHability = false;    // Indicates if the Character is using an hability 
     protected String name;  // Indicates the name of the Character
     
     /**

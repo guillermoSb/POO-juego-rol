@@ -22,7 +22,6 @@ public class Explorer extends Player{
             }
             items.add(item);
         }
-        //TODO Auto-generated constructor stub
     }
 
     /**

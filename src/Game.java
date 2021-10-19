@@ -9,7 +9,7 @@ public class Game {
     private int level;  // Current Level
     private int score;
     private boolean gameOver = false;   // Shows if the game is over
-    private boolean victory = false;    // Shows if the player has won    // TODO: ADD TO THE UML
+    private boolean victory = false;    // Shows if the player has won
     private Character currentTurn = null;   // Current character playing
     private String gameState = "";  // Game state
 
@@ -81,7 +81,6 @@ public class Game {
         return this.gameOver;
     }
 
-    // TODO: ADD TO UML
     /**
      * Checks if the game has ended
      */

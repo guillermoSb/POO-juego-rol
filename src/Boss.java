@@ -13,7 +13,6 @@ public class Boss extends Character {
      */
     Boss(int health, int hability, int habilityCounter, String name) {
         super(health, hability, habilityCounter, name);
-        //TODO Auto-generated constructor stub
     }
 
     /**
