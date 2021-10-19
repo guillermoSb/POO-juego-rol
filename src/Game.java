@@ -1,23 +1,37 @@
 import java.util.ArrayList;
 
+/**
+ * Defines thee current game
+ */
 public class Game {
-    private ArrayList<Player> players;
-    private ArrayList<Character> enemies;
+    private ArrayList<Player> players;  // Players of the game
+    private ArrayList<Character> enemies;   // Enemies of the game
+    private int level;  // Current Level
     private int score;
-    private int level;
-    private boolean gameOver = false;
-    private boolean victory = false;    // TODO: ADD TO THE UML
-    private Character currentTurn = null;
-    private String gameState = "";
+    private boolean gameOver = false;   // Shows if the game is over
+    private boolean victory = false;    // Shows if the player has won    // TODO: ADD TO THE UML
+    private Character currentTurn = null;   // Current character playing
+    private String gameState = "";  // Game state
 
+    /**
+     * Creates a Game with all the parametters needed
+     * @param players
+     * @param enemies
+     * @param score
+     * @param level
+     */
     Game(ArrayList<Player> players, ArrayList<Character> enemies, int score, int level) {
-        this.players = players;
+        this.players = players; 
         this.enemies = enemies;
         this.score = score;
         this.level = level;
         this.currentTurn = players.get(0);
     }
-
+    
+    /**
+     * Creates a Game with all the players as a list and random enemies
+     * @param players
+     */
     Game(ArrayList<Player> players) {
         // * 1. Create the enemies
         ArrayList<Character> enemies = new ArrayList<Character>();
@@ -35,15 +49,26 @@ public class Game {
         this.currentTurn = players.get(0);
     }
 
+    /**
+     * Gets the game state
+     * @return <code>String</code>
+     */
     String getGameState() {
         return this.gameState;
     }
 
+    /**
+     * Gets the game over state
+     * @return <code>boolean</code>
+     */
     boolean getGameOver() {
         return this.gameOver;
     }
 
     // TODO: ADD TO UML
+    /**
+     * Checks if the game has ended
+     */
     void checkForGameOver() {
         if (enemies.get(0).health <= 0) {
             this.victory = true;
@@ -60,6 +85,9 @@ public class Game {
         }
     }
 
+    /**
+     * Changes to the next turn
+     */
     void changeToNextTurn() {
         // * 0. Check if Game Over
         this.checkForGameOver();
@@ -88,22 +116,42 @@ public class Game {
         }
     };
 
+    /**
+     * Gets the current character playing
+     * @return <code>Character</code>
+     */
     Character getCurrentTurn() {
         return this.currentTurn;
     }
 
+    /**
+     * Set the current character turn
+     * @param character
+     */
     void setCurrentTurn(Character character) {
         this.currentTurn = character;
     }
 
+    /**
+     * Gets the Enemies
+     * @return <code>ArrayList<Character></code>
+     */
     ArrayList<Character> getEnemies() {
         return this.enemies;
     }
 
+    /**
+     * Gets the Players
+     * @return <code>ArrayList<Character></code>
+     */
     ArrayList<Player> getPlayers() {
         return this.players;
     }
 
+
+    /**
+     * Return the string representation for the game
+     */
     @Override
     public String toString() {
         String game = "";
