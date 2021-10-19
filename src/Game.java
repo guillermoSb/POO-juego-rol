@@ -29,6 +29,22 @@ public class Game {
     }
     
     /**
+     * Returns if the game has ended in victory
+     * @return <code>boolean</code>
+     */
+    public boolean isVictory() {
+        return victory;
+    }
+
+     /**
+     * Sets the victory state
+     * @param victory
+     */
+    public void setVictory(boolean victory) {
+        this.victory = victory;
+    }
+
+    /**
      * Creates a Game with all the players as a list and random enemies
      * @param players
      */
@@ -70,10 +86,17 @@ public class Game {
      * Checks if the game has ended
      */
     void checkForGameOver() {
-        if (enemies.get(0).health <= 0) {
+        boolean enemiesDefeated = true;
+        for (Character enemy : enemies) {
+            if (enemy.getHealth() > 0) {
+                enemiesDefeated = false;
+            }
+        }
+        if (enemiesDefeated) {
             this.victory = true;
             return;
-        } 
+        }
+
         boolean playersDefeated = true;
         for (Player player : players) {
             if (player.getHealth() > 0) {
@@ -90,6 +113,7 @@ public class Game {
      */
     void changeToNextTurn() {
         // * 0. Check if Game Over
+        clearCharacters();
         this.checkForGameOver();
         // * 1. Check if it is a player turn
         int playerIndex = getPlayers().indexOf(getCurrentTurn());
@@ -115,6 +139,39 @@ public class Game {
             }
         }
     };
+
+    void clearCharacters() {
+        for (Character enemy : enemies) {
+            if (enemy.getHealth() <= 0) {
+                if (enemy instanceof RaidBoss) {
+                    RaidBoss raidboss = (RaidBoss) enemy;
+                    // * Remove all the enemy companions
+                    for (Character companion : raidboss.getCompanions()) {
+                        int indexEnemy = enemies.indexOf(companion);
+                        if (indexEnemy >= 0) {
+                            enemies.remove(indexEnemy);
+                        }
+                    }
+                    // * Remove the boss
+                    int indexBoss = enemies.indexOf(raidboss);
+                    getEnemies().remove(0);
+                    // * End the game
+                    for (Character nestedEnemy : enemies) {
+                        nestedEnemy.setHealth(0);
+                    }
+                    break;
+                } else {
+                    // * Remove the enemy
+                    enemies.remove(enemy);
+                }
+            }
+            for (Player player : players) {
+                if (player.getHealth() <= 0) {
+                    players.remove(player);
+                }
+            }
+        }
+    }
 
     /**
      * Gets the current character playing
@@ -155,16 +212,15 @@ public class Game {
     @Override
     public String toString() {
         String game = "";
-        game += String.format("Current Level: %d\n", level);
         
         game += String.format("Players: \n");
         for (int i = 0; i < players.size(); i++) {
-            game += String.format("%d - %s\n", i + 1, players.get(i).toString());
+            game += String.format("%d - %s", i + 1, players.get(i).toString());
         }
         
         game += String.format("Enemies: \n");
         for (int i = 0; i < enemies.size(); i++) {
-            game += String.format("%d - %s\n", i + 1, enemies.get(i).toString());
+            game += String.format("%d - %s", i + 1, enemies.get(i).toString());
         }
         return game;
     }

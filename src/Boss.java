@@ -21,7 +21,7 @@ public class Boss extends Character {
      * @param name
      */
     Boss(String name) {
-        super(200, 4, 0, name);
+        super(200, 0, 0, name);
     }
 
 

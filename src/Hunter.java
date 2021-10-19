@@ -16,7 +16,7 @@ public class Hunter extends Player {
      * Create a Hunter just using a name
      */
     Hunter(String name) {
-        super(150, 2, 0, name, new ArrayList<Item>());
+        super(30, 2, 0, name, new ArrayList<Item>());
         this.pet = new Pet("Fido");
     }
 

@@ -3,9 +3,9 @@ import java.util.Scanner;
 
 public class Driver {
     public static void main(String[] args) throws Exception {
-        System.out.println("- RAID BOSS GAME -");
-        System.out.println("Story: ");
-        showInfo("It is recomended to have your console in Full Screen Mode");
+        System.out.println("\n\n\n/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/- RAID BOSS GAME -/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/\n\n\n");
+        System.out.println("Story: You are traveling through space when an alien spaceship is attacking yours. The battle is reducing your crew and the only way to save everyone is to fight against the Raid Boss...s");
+        showInfo("It is recomended to have your console in Full Screen Mode\n");
         Game game = null;
         // * 1. Create the Game
         while (game == null) {
@@ -20,7 +20,7 @@ public class Driver {
         }
         // * 2. Game Loop
         Scanner scan = new Scanner(System.in);
-        while (!game.getGameOver()) {
+        while (!game.getGameOver() && !game.isVictory()) {
             try {
                 // * 2.1. Show game state
                 System.out.println(game);
@@ -32,7 +32,13 @@ public class Driver {
                         || game.getCurrentTurn() instanceof Boss) {
                     takeEnemyTurn(game);
                 }
-                // * 2.3. Let the player decide what to do
+                game.changeToNextTurn();
+                if (game.getGameOver()) {
+                    showInfo("GAME OVER!!! The RaidBoss won.");
+                } else if (game.isVictory()) {
+                    showInfo("YOU WON!");
+
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 showError("Please choose a valid option.");
@@ -55,7 +61,7 @@ public class Driver {
     }
 
     public static void showInfo(String message) {
-        System.out.printf("\n[INFO] %s\n", message);
+        System.out.printf("[INFO] %s\n", message);
     }
 
     public static void showError(String error) {
@@ -145,6 +151,9 @@ public class Driver {
                     return;
                 }
                 Character characterAttacked = hunter.throwPet(game.getEnemies());
+                if (hunter.getPet() == null) {
+                    showInfo(hunter.getName() + "'s pet has died - you can use it again in 3 turns");
+                }
                 showGameState(hunter.getPet(), characterAttacked);
             } else {
                 // Validate that the player is not using an item
@@ -182,7 +191,6 @@ public class Driver {
     }
 
     public static void takeEnemyTurn(Game game) {
-        System.out.println("TAKING ENEMY TURN");
         ArrayList<Character> characters = new ArrayList<Character>();
         for (Player player : game.getPlayers()) {
             characters.add(player);
@@ -190,6 +198,7 @@ public class Driver {
         double chance = Math.random();
         if (game.getCurrentTurn() instanceof RaidBoss && (chance) > 0.90) {
             RaidBoss boss = (RaidBoss) game.getCurrentTurn();
+            System.out.println("Cloning");
             if (boss.getCompanions().size() <= 0) {
                 String clonedMessage = boss.clone(game);
                 showInfo(clonedMessage);
@@ -199,29 +208,44 @@ public class Driver {
                 showGameState(game.getCurrentTurn(), characterAttacked);
             }
         } else if (game.getCurrentTurn() instanceof RaidBoss && (chance <= 0.90) && chance > 0.80) {
+            System.out.println("SET HABILITY");
             RaidBoss boss = (RaidBoss) game.getCurrentTurn();
             if (boss.getCompanions().size() > 0) {
-                boss.setHability((int) Math.round((Math.random() * 1)));
+                // Define the new hability
+                int hability = (int) Math.round((Math.random() * 1));
+                String habilityString = hability == 1 ? "Damage Increase 2X" : "Health increase +20";
+                for (Character companion : boss.getCompanions()) {
+                    companion.setHability(hability);
+                }
+
+                showInfo(boss.getName() + " has changed the hability for its companions " + habilityString);
             } else {
                 Character characterAttacked = game.getCurrentTurn().attackRandomCharacter(characters);
                 showGameState(game.getCurrentTurn(), characterAttacked);
             }
         } else if (game.getCurrentTurn() instanceof RaidBoss && (chance <= 0.80) && chance > 0.60) {
             RaidBoss boss = (RaidBoss) game.getCurrentTurn();
+            System.out.println("Reset compas");
+
             if (boss.getCompanions().size() > 0) {
                 boss.setCompanions(new ArrayList<Character>());
+                showInfo(boss.getName() + " has released the companions");
             } else {
                 Character characterAttacked = game.getCurrentTurn().attackRandomCharacter(characters);                                                                                // random player
                 showGameState(game.getCurrentTurn(), characterAttacked);
             }
         } else if (game.getCurrentTurn() instanceof RaidBoss && (chance <= 0.60) && chance > -1) {
+            System.out.println("attack random");
             Character characterAttacked = game.getCurrentTurn().attackRandomCharacter(characters); 
             showGameState(game.getCurrentTurn(), characterAttacked);
         } else if (game.getCurrentTurn() instanceof Boss || game.getCurrentTurn() instanceof Enemy && chance >= 0.80 && !game.getCurrentTurn().isUsingHability()) {
+            System.out.println("Normal Turn");
             if (game.getCurrentTurn().hability == 0) {
+                System.out.println("Health");
                 showInfo(game.getCurrentTurn().getName() + " has used a health hability (+20 health)");
                 game.getCurrentTurn().setHealth(game.getCurrentTurn().getHealth() + 20);
             } else if (game.getCurrentTurn().hability == 1) {
+                System.out.println("damage");
                 game.getCurrentTurn().setDamageMultiplier(2);
                 showInfo(game.getCurrentTurn().getName() + " has increased its damage for the next turn (X2)");
                 game.getCurrentTurn().setUsingHability(true);
@@ -234,7 +258,6 @@ public class Driver {
     }
 
     public static void showGameState(Character attacker, Character attacked) {
-        clearScreen();
         showInfo(String.format("%s has attacked %s", attacker.getName(), attacked.getName()));
 
     }

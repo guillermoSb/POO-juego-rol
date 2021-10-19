@@ -22,7 +22,7 @@ public class Enemy extends Character {
      * @param name
      */
     Enemy(String name) {
-        this(100, 3, 0, name);
+        this(100, 0, 0, name);
     }
     
 
